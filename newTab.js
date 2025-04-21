@@ -127,6 +127,73 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
+  const encouragementMessages = [
+    "Great job!",
+    "You’re making progress!",
+    "Keep going!",
+    "Awesome!",
+    "Well done!",
+    "Nice work!"
+  ];
+  
+  const style = document.createElement("style");
+  style.textContent = `
+    .speech-bubble {
+      position: absolute;
+      max-width: 160px;
+      padding: 8px 12px;
+      background: white;
+      border: 2px solid #444;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.2;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 20px;
+      border-width: 10px 8px 0 8px;
+      border-style: solid;
+      border-color: white transparent transparent transparent;
+      display: block;
+      width: 0;
+    }
+  `;
+  document.head.appendChild(style);
+  function showSpeechBubble(area) {
+    // pick a random message
+    const msg =
+      encouragementMessages[
+        Math.floor(Math.random() * encouragementMessages.length)
+      ];
+  
+    // position roughly above the deer hotspot
+    const x = area.left + area.width * 0.5;
+    const y = area.top - 20;
+  
+    const bubble = document.createElement("div");
+    bubble.className = "speech-bubble";
+    bubble.textContent = msg;
+    bubble.style.left = `${x}px`;
+    bubble.style.top = `${y}px`;
+  
+    document.body.appendChild(bubble);
+  
+    // fade‐out and remove after 2s
+    setTimeout(() => {
+      bubble.style.transition = "opacity 0.5s";
+      bubble.style.opacity = "0";
+      bubble.addEventListener(
+        "transitionend",
+        () => bubble.remove(),
+        { once: true }
+      );
+    }, 1500);
+  }
+
   function removeAllListeners() {
     hoverListeners.forEach((listener) => {
       document.removeEventListener("mousemove", listener);
@@ -672,6 +739,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (tasks[originalIndex].completed) {
           const deleteButton = taskItem.querySelector(".delete-task");
+          const area = deerAreas.find(a => a.category === category);
+          if (area) showSpeechBubble(area);
           if (deleteButton) deleteButton.remove();
         }
 
