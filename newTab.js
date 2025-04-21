@@ -194,6 +194,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1500);
   }
 
+  const quotes = [
+    "You are capable of amazing things.",
+    "Small steps every day.",
+    "Believe in yourself and all that you are.",
+    "One day at a time.",
+    "Progress over perfection.",
+  ];
+
+  const quoteText = quotes[Math.floor(Math.random() * quotes.length)];
+  const quoteEl = document.createElement("div");
+  quoteEl.className = "quote-overlay";
+  quoteEl.textContent = quoteText;
+  backgroundContainer.appendChild(quoteEl);
+
+
   function removeAllListeners() {
     hoverListeners.forEach((listener) => {
       document.removeEventListener("mousemove", listener);
